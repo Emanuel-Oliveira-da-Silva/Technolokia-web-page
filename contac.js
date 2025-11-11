@@ -1,96 +1,90 @@
-// ===== VISIBILIDAD DE SECCIONES =====
-const tipoSolicitud = document.getElementById("tipo-solicitud");
-const sectionPlan = document.getElementById("section-plan");
-const sectionSoporte = document.getElementById("section-soporte");
-
-tipoSolicitud.addEventListener("change", () => {
-  const val = tipoSolicitud.value;
-
-  sectionPlan.classList.toggle("hidden", val !== "plan");
-  sectionSoporte.classList.toggle("hidden", val !== "soporte");
-});
-
-// ===== FORMULARIO =====
-const form = document.getElementById("request-form");
-const feedback = document.getElementById("form-feedback");
-
-// PLAN
-const planSelect = document.getElementById("plan-select");
-const equiposInput = document.getElementById("equipos");
-
-// SOPORTE
-const descripcionInput = document.getElementById("descripcion");
-const tecnicoPreferidoInput = document.getElementById("tecnico-preferido");
-
-// ERRORES
-const errorTipo = document.getElementById("error-tipo");
-const errorPlan = document.getElementById("error-plan");
-const errorEquipos = document.getElementById("error-equipos");
-const errorDescripcion = document.getElementById("error-descripcion");
-
-function clearErrors() {
-  errorTipo.textContent = "";
-  errorPlan.textContent = "";
-  errorEquipos.textContent = "";
-  errorDescripcion.textContent = "";
-  feedback.textContent = "";
+function getSession() {
+  try { return JSON.parse(localStorage.getItem("technolokia:session")); }
+  catch { return null; }
+}
+function getUser() {
+  try { return JSON.parse(localStorage.getItem("technolokia:user")); }
+  catch { return null; }
 }
 
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  clearErrors();
+document.addEventListener("DOMContentLoaded", () => {
+  const session = getSession();
+  const user = getUser();
 
-  const tipo = tipoSolicitud.value;
-  let data = { tipo };
-
-  // ===== VALIDACIÓN COMPRA DE PLAN =====
-  if (tipo === "plan") {
-    const plan = planSelect.value;
-    const equipos = Number(equiposInput.value);
-
-    if (!plan) {
-      errorPlan.textContent = "Debes seleccionar un plan.";
-      return;
-    }
-
-    if (!equipos || equipos <= 0) {
-      errorEquipos.textContent = "Ingresá una cantidad válida.";
-      return;
-    }
-
-    data.plan = plan;
-    data.equipos = equipos;
+  if (!session || !user || session.email !== user.email) {
+    document.getElementById("main-form").innerHTML =
+      `<p class="alert">Tenés que iniciar sesión.<br><a href="login.html">Iniciar sesión</a></p>`;
+    return;
   }
 
-  // ===== VALIDACIÓN PROBLEMA TÉCNICO =====
-  if (tipo === "soporte") {
-    const desc = descripcionInput.value.trim();
-    if (!desc) {
-      errorDescripcion.textContent = "Describí el problema.";
+  const tipoSelect = document.getElementById("tipo-solicitud");
+  const compraBox = document.getElementById("compra-plan-box");
+  const soporteBox = document.getElementById("soporte-box");
+
+  tipoSelect.addEventListener("change", () => {
+    compraBox.style.display = tipoSelect.value === "plan" ? "block" : "none";
+    soporteBox.style.display = tipoSelect.value === "soporte" ? "block" : "none";
+  });
+
+  // ----- Solicitud de Plan -----
+  document.getElementById("btn-enviar-plan").addEventListener("click", async () => {
+    const plan = document.getElementById("select-plan").value;
+    const equipos = parseInt(document.getElementById("input-equipos").value);
+    const errPlan = document.getElementById("err-plan");
+    const errEquipos = document.getElementById("err-equipos");
+
+    errPlan.textContent = "";
+    errEquipos.textContent = "";
+
+    if (!["Standart", "Exclusive", "Premium"].includes(plan)) {
+      errPlan.textContent = "Opción inválida";
       return;
     }
 
-    data.descripcion = desc;
-    data.tecnicoPreferido = tecnicoPreferidoInput.value.trim() || "No especificado";
-  }
+    const limites = { Standart: 10, Exclusive: 25, Premium: 50 };
+    if (!(equipos >= 1 && equipos <= limites[plan])) {
+      errEquipos.textContent = "Número de equipos inválido";
+      return;
+    }
 
-  // ===== ENVIAR =====
-  try {
-    const res = await fetch("https://technolokia-bot-production.up.railway.app/request", {
+    const res = await fetch("https://technolokia-bot-production.up.railway.app/api/nueva-solicitud-plan", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        empresa: user.name,
+        email: user.email,
+        plan,
+        equipos
+      })
     });
 
-    if (!res.ok) throw new Error("Error en el servidor");
+    if (res.ok) alert("✅ Solicitud enviada con éxito.");
+  });
 
-    feedback.textContent = "✅ Solicitud enviada correctamente. ¡Nos vamos a contactar!";
-    form.reset();
-    sectionPlan.classList.add("hidden");
-    sectionSoporte.classList.add("hidden");
+  // ----- Pre Ticket -----
+  document.getElementById("btn-enviar-soporte").addEventListener("click", async () => {
+    const problema = document.getElementById("input-problema").value.trim();
+    const tecnico = document.getElementById("input-tecnico").value.trim();
+    const errProb = document.getElementById("err-problema");
 
-  } catch (err) {
-    console.error(err);
-    feedback.textContent = "❌ Hubo un error, intentá más tarde.";
-  }
+    errProb.textContent = "";
+    if (!problema) {
+      errProb.textContent = "Describí el inconveniente.";
+      return;
+    }
+
+    const res = await fetch("https://technolokia-bot-production.up.railway.app/api/nuevo-pre-ticket", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        empresa: user.name,
+        email: user.email,
+        problema,
+        tecnico,
+        plan: user.selectedPlan
+      })
+    });
+
+    if (res.ok) alert("✅ Pre-Ticket enviado con éxito.");
+  });
 });
