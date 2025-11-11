@@ -256,9 +256,15 @@ document.addEventListener("DOMContentLoaded", () => {
       // Listener para eliminar plan
       planesBox.querySelectorAll("button.btn-danger").forEach((btn) => {
         btn.addEventListener("click", () => {
-          user.planes.splice(Number(btn.dataset.index), 1);
-          setUser(user);
-          location.reload();
+          const index = Number(btn.dataset.index);
+user.planes.splice(index, 1);
+setUser(user);
+
+// IMPORTANTE: No dejar que se vuelva a agregar desde sincronización
+// Guardar una marca de "plan eliminado"
+localStorage.setItem("technolokia:removed-" + index, "yes");
+
+location.reload();
         });
       });
     }
