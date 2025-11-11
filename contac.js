@@ -87,12 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // --- Guardarlo en el usuario ---
-    user.planes.push({
-      tipo: plan.toLowerCase(), // standart/exclusive/premium
-      equipos
-    });
-    localStorage.setItem('technolokia:user', JSON.stringify(user));
 
     // Enviar a la API del bot (aunque marque CORS, igual funciona)
     try {
@@ -110,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.warn("CORS bloqueó la respuesta, pero el servidor recibió la solicitud.");
     }
 
-    alert("✅ Plan añadido correctamente a tu perfil.");
+    alert("✅ Solicitud enviada. Finanzas la revisará.");
     location.href = "profile.html";
   });
 
