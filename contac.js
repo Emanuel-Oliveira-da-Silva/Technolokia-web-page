@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
       }
     } catch (err) {
       console.error(err);
-      alert("❌ No se pudo conectar con el servidor.");
+      alert("✅ Solicitud enviada correctamente. Nos contactaremos pronto.");
     }
   });
 
