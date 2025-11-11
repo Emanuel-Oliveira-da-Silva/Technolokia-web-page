@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Solicitud de servicio — Technolokia</title>
+  <title>Nueva Solicitud — Technolokia</title>
   <link rel="stylesheet" href="styles.css" />
-  <script defer src="app.js"></script>
   <script defer src="auth.js"></script>
+  <script defer src="contac.js"></script>
 </head>
 <body>
 
@@ -15,16 +15,13 @@
     <div class="logo" onclick="location.href='index.html'">
       <img src="logo-header.png" alt="Technolokia" class="logo-img">
     </div>
-    <button class="menu-toggle" aria-expanded="false" aria-label="Abrir menú">
-      <span></span><span></span><span></span>
-    </button>
-    <nav class="nav" aria-label="Navegación principal">
+
+    <button class="menu-toggle" aria-expanded="false"><span></span><span></span><span></span></button>
+
+    <nav class="nav">
       <a href="index.html">Inicio</a>
-      <a href="contac.html">Solicitar servicio</a>
+      <a href="contac.html" class="active">Solicitar servicio</a>
       <a href="profile.html" class="nav-profile hidden">Mi perfil</a>
-      <a href="admin.html" class="nav-admin hidden">Admin</a>
-      <a href="register.html" class="nav-register">Registrarse</a>
-      <a href="login.html" class="nav-login">Iniciar sesión</a>
       <button class="nav-logout hidden btn btn-ghost small" type="button">Salir</button>
     </nav>
   </div>
@@ -32,19 +29,56 @@
 </header>
 
 <main class="container">
+
   <section class="panel">
-    <h1 class="title">Nueva solicitud</h1>
-    <p class="lead">Contanos el problema. Si todavía no elegiste plan, podés actualizarte a Premium desde acá.</p>
-    <form id="service-form" class="form">
-      <input id="svc-subject" class="input" placeholder="Asunto del problema" required />
-      <textarea id="svc-details" class="input textarea" placeholder="Describí el inconveniente" required></textarea>
-      <label class="muted"><input id="svc-premium" type="checkbox" /> Actualizar a plan Premium</label>
-      <div class="form__actions">
-        <button class="btn btn-primary" type="submit">Enviar solicitud</button>
+    <h1 class="title">Nueva Solicitud</h1>
+    <p class="lead">Contanos el problema. Si todavía no tenés plan, también podés solicitar uno acá.</p>
+
+    <form id="request-form" class="form">
+
+      <!-- Tipo de Solicitud -->
+      <label>Tipo de Solicitud</label>
+      <select id="tipo-solicitud" class="input" required>
+        <option value="">Seleccionar...</option>
+        <option value="plan">Compra de Plan</option>
+        <option value="soporte">Problema Técnico</option>
+      </select>
+      <div id="error-tipo" class="error"></div>
+
+      <!-- COMPRA DE PLAN -->
+      <div id="section-plan" class="hidden">
+
+        <label>Seleccione su Plan</label>
+        <select id="plan-select" class="input">
+          <option value="">Seleccione su plan</option>
+          <option value="Standart">Standart (1–10 equipos)</option>
+          <option value="Exclusive">Exclusive (1–25 equipos)</option>
+          <option value="Premium">Premium (1–50 equipos)</option>
+        </select>
+        <div id="error-plan" class="error"></div>
+
+        <label>Cantidad de Equipos</label>
+        <input id="equipos" type="number" class="input" placeholder="Ej: 8" />
+        <div id="error-equipos" class="error"></div>
       </div>
+
+      <!-- PROBLEMA TÉCNICO -->
+      <div id="section-soporte" class="hidden">
+        <textarea id="descripcion" class="input textarea" placeholder="Describí el inconveniente"></textarea>
+        <input id="tecnico-preferido" class="input" placeholder="Técnico preferido (Opcional)" />
+        <div id="error-descripcion" class="error"></div>
+      </div>
+
+      <div class="form__actions">
+        <button id="btn-enviar" class="btn btn-primary" type="submit">Enviar Solicitud</button>
+      </div>
+
     </form>
-    <div id="svc-feedback" class="feedback"></div>
+
+    <div id="form-feedback" class="feedback"></div>
+
   </section>
+
 </main>
 
 <footer style="background:#0b1220;color:white;padding:24px;margin-top:40px;">
@@ -53,10 +87,8 @@
     <span>Año de creación: 2025</span>
     <span>Email: contacto.technolokia@gmail.com</span>
     <span>Instagram: @technolokia.ar</span>
-    <span>Tel. Tomás: 11-3405-3010 — Tel. Franco: 11-2744-1911</span>
   </div>
 </footer>
-</body>
-</html>
 
+</body>
 </html>
