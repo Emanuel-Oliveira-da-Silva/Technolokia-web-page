@@ -30,13 +30,22 @@ document.addEventListener('DOMContentLoaded', ()=> {
 
   // Mostrar el valor por defecto si ya tienen plan
   tipoSelect.addEventListener('change', ()=> {
-    compraBox.style.display = tipoSelect.value === 'plan' ? 'block' : 'none';
-    soporteBox.style.display = tipoSelect.value === 'soporte' ? 'block' : 'none';
-    // reset errores
-    errPlan.textContent = '';
-    errEquipos.textContent = '';
-    errProblema.textContent = '';
-  });
+  if (tipoSelect.value === 'plan') {
+    compraBox.classList.remove('hidden');
+    soporteBox.classList.add('hidden');
+  } else if (tipoSelect.value === 'soporte') {
+    soporteBox.classList.remove('hidden');
+    compraBox.classList.add('hidden');
+  } else {
+    compraBox.classList.add('hidden');
+    soporteBox.classList.add('hidden');
+  }
+
+  errPlan.textContent = '';
+  errEquipos.textContent = '';
+  errProblema.textContent = '';
+});
+
 
   // Enviar solicitud de plan
   btnEnviarPlan.addEventListener('click', async () => {
