@@ -169,6 +169,48 @@ document.addEventListener("DOMContentLoaded", () => {
     <div><b>Teléfono:</b> ${user.phone || "—"}</div>
   `;
 
+    // ==== Sincronizar estado de solicitudes con Discord ====
+    (async () => {
+      try {
+        const res = await fetch(
+          "https://technolokia-bot-production.up.railway.app/api/solicitudes"
+        );
+        const data = await res.json();
+        const userEmail = user.email.toLowerCase();
+
+        for (const id in data) {
+          const s = data[id];
+          if (s.email.toLowerCase() !== userEmail) continue;
+
+          // Si fue aprobado → agregar/reemplazar plan
+          if (s.estado === "aprobado") {
+            const tipo =
+              s.plan.toLowerCase() === "standart"
+                ? "standard"
+                : s.plan.toLowerCase();
+            const exists = user.planes.some((p) => p.tipo === tipo);
+            if (!exists) {
+              user.planes.push({ tipo, equipos: s.equipos });
+              setUser(user);
+            }
+          }
+
+          // Si fue rechazado → guardar rechazo para mostrarlo
+          if (s.estado === "rechazado") {
+            user.planes.push({
+              tipo: s.plan.toLowerCase(),
+              equipos: 0,
+              estado: "rechazado",
+              razon: s.razon || "Sin motivo especificado",
+            });
+            setUser(user);
+          }
+        }
+      } catch (err) {
+        console.warn("No se pudo sincronizar planes:", err);
+      }
+    })();
+
     // Mostrar planes
     const planesBox = document.getElementById("planes-box");
     const plansInfo = {
