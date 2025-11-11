@@ -76,7 +76,7 @@ form.addEventListener("submit", async (event) => {
 
   // ===== ENVIAR =====
   try {
-    const res = await fetch("/request", {
+    const res = await fetch("https://technolokia-bot-production.up.railway.app/request", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
