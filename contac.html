@@ -4,14 +4,29 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Nueva Solicitud — Technolókia</title>
+
   <link rel="stylesheet" href="styles.css" />
-  <script src="contac.js"></script>
   <script defer src="app.js"></script>
   <script defer src="auth.js"></script>
+
+  <style>
+    /* estilos locales del formulario */
+    .form-wrapper{max-width:720px;margin:36px auto;padding:22px;background:#fff;border-radius:10px;box-shadow:0 6px 18px rgba(16,24,40,0.06)}
+    label{display:block;margin:10px 0 6px;font-weight:600}
+    select,input[type="text"],textarea{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:14px}
+    textarea{min-height:110px;resize:vertical}
+    .btn{padding:10px 14px;border-radius:8px;background:#2563eb;color:#fff;border:0;cursor:pointer;margin-top:10px}
+    .btn.secondary{background:#10b981}
+    .err{color:#db2777;margin-top:6px;font-size:13px}
+    .meta{margin-top:8px;color:#6b7280;font-size:13px}
+    .hidden{display:none}
+    .alert{background:#fff3cd;padding:10px;border:1px solid #ffeeba;border-radius:8px;margin-top:16px}
+  </style>
 </head>
 <body>
 
-  <header class="header">
+<!-- HEADER (copiado de index.html) -->
+<header class="header">
   <div class="header__inner">
     <div class="logo" onclick="location.href='index.html'">
       <img src="logo-header.png" alt="Technolokia" class="logo-img">
@@ -32,66 +47,55 @@
   <hr class="rule" />
 </header>
 
-<main>
-  <div class="container" id="main-form">
-    <h1>Nueva Solicitud</h1>
-    <p class="lead">Contanos el problema. Si todavía no elegiste plan, podés elegirlo acá.</p>
 
-    <label for="tipo-solicitud">Tipo de Solicitud</label>
-    <select id="tipo-solicitud">
-      <option value="">-- Seleccionar --</option>
-      <option value="plan">Compra de Plan</option>
-      <option value="soporte">Problema técnico</option>
+
+<!-- FORMULARIO -->
+<div class="form-wrapper" id="main-form">
+  <h1>Nueva Solicitud</h1>
+  <p class="lead">Contanos el problema. Si todavía no elegiste plan, podés elegirlo acá.</p>
+
+  <label for="tipo-solicitud">Tipo de Solicitud</label>
+  <select id="tipo-solicitud">
+    <option value="">-- Seleccionar --</option>
+    <option value="plan">Compra de Plan</option>
+    <option value="soporte">Problema técnico</option>
+  </select>
+
+  <!-- COMPRA DE PLAN -->
+  <div id="compra-plan-box" class="hidden" style="margin-top:14px">
+    <label for="select-plan">Seleccione su Plan</label>
+    <select id="select-plan">
+      <option value="">Seleccione su Plan</option>
+      <option value="Standart">Standart</option>
+      <option value="Exclusive">Exclusive</option>
+      <option value="Premium">Premium</option>
     </select>
+    <div id="err-plan" class="err" aria-live="polite"></div>
 
-    <!-- BLOQUE: Compra de Plan -->
-    <div id="compra-plan-box" class="hidden" style="margin-top:14px">
-      <label for="select-plan">Seleccione su Plan</label>
-      <select id="select-plan">
-        <option value="">Seleccione su Plan</option>
-        <option value="Standart">Standart</option>
-        <option value="Exclusive">Exclusive</option>
-        <option value="Premium">Premium</option>
-      </select>
-      <div id="err-plan" class="err" aria-live="polite"></div>
+    <label for="input-equipos" style="margin-top:10px">Cantidad de equipos</label>
+    <input id="input-equipos" type="text" inputmode="numeric" placeholder="Ej: 12" />
+    <div id="err-equipos" class="err" aria-live="polite"></div>
 
-      <label for="input-equipos" style="margin-top:10px">Cantidad de equipos</label>
-      <input id="input-equipos" type="text" inputmode="numeric" placeholder="Ej: 12" />
-      <div id="err-equipos" class="err" aria-live="polite"></div>
-
-      <button id="btn-enviar-plan" class="btn">Enviar Solicitud</button>
-      <div class="meta">Al enviar, el equipo de Finanzas será notificado.</div>
-    </div>
-
-    <!-- BLOQUE: Problema Técnico -->
-    <div id="soporte-box" class="hidden" style="margin-top:14px">
-      <label for="input-problema">Describí el inconveniente</label>
-      <textarea id="input-problema" placeholder="Escribí lo que está pasando..."></textarea>
-      <div id="err-problema" class="err" aria-live="polite"></div>
-
-      <label for="input-tecnico" style="margin-top:10px">Técnico Preferido (Opcional)</label>
-      <input id="input-tecnico" type="text" placeholder="Nombre del técnico (opcional)" />
-
-      <button id="btn-enviar-soporte" class="btn secondary">Enviar Solicitud</button>
-      <div class="meta">Al enviar, el rol Servicio Técnico será mencionado y se generará un pre-ticket.</div>
-    </div>
-
-    <p class="small" style="margin-top:18px">Si no estás logueado, vas a ver un aviso para iniciar sesión.</p>
+    <button id="btn-enviar-plan" class="btn">Enviar Solicitud</button>
+    <div class="meta">Al enviar, el equipo de Finanzas será notificado.</div>
   </div>
 
-  <!-- Contac script (separate file contac.js) -->
+  <!-- SOPORTE -->
+  <div id="soporte-box" class="hidden" style="margin-top:14px">
+    <label for="input-problema">Describí el inconveniente</label>
+    <textarea id="input-problema" placeholder="Escribí lo que está pasando..."></textarea>
+    <div id="err-problema" class="err" aria-live="polite"></div>
 
-</main>
+    <label for="input-tecnico" style="margin-top:10px">Técnico Preferido (Opcional)</label>
+    <input id="input-tecnico" type="text" placeholder="Nombre del técnico (opcional)" />
 
-<footer style="background:#0b1220;color:white;padding:24px;margin-top:40px;">
-  <div style="max-width:1100px;margin:auto;display:flex;flex-direction:column;gap:6px;">
-    <strong>TECHNOLOKIA — Servicio Técnico</strong>
-    <span>Año de creación: 2025</span>
-    <span>Email: contacto.technolokia@gmail.com</span>
-    <span>Instagram: @technolokia.ar</span>
-    <span>Tel. Tomás: 11-3405-3010 — Tel. Franco: 11-2744-1911</span>
+    <button id="btn-enviar-soporte" class="btn secondary">Enviar Solicitud</button>
+    <div class="meta">Al enviar, el rol Servicio Técnico será mencionado y se generará un pre-ticket.</div>
   </div>
-</footer>
-  
+
+  <p class="small" style="margin-top:18px">Si no estás logueado, vas a ver un aviso para iniciar sesión.</p>
+</div>
+
+<script src="contac.js"></script>
 </body>
 </html>
