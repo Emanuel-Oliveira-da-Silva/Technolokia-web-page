@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mi perfil — Technolokia</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="app.js"></script>
+  <script defer src="auth.js"></script>
+</head>
+<body>
+
+<header class="header">
+  <div class="header__inner">
+    <div class="logo" onclick="location.href='index.html'">
+      <img src="logo-header.png" alt="Technolokia" class="logo-img">
+    </div>
+    <button class="menu-toggle" aria-expanded="false" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" aria-label="Navegación principal">
+      <a href="index.html">Inicio</a>
+      <a href="contac.html">Solicitar servicio</a>
+      <a href="profile.html" class="nav-profile hidden">Mi perfil</a>
+      <a href="admin.html" class="nav-admin hidden">Admin</a>
+      <a href="register.html" class="nav-register">Registrarse</a>
+      <a href="login.html" class="nav-login">Iniciar sesión</a>
+      <button class="nav-logout hidden btn btn-ghost small" type="button">Salir</button>
+    </nav>
+  </div>
+  <hr class="rule" />
+</header>
+
+<main class="container">
+  <section class="panel">
+    <h1 class="title">Mi perfil</h1>
+    <div id="profile-box" class="form"></div>
+    <div class="form__actions" style="margin-top:12px;">
+      <button class="btn btn-ghost" onclick="location.href='contac.html'">Nueva solicitud</button>
+    </div>
+  </section>
+</main>
+
+<footer style="background:#0b1220;color:white;padding:24px;margin-top:40px;">
+  <div style="max-width:1100px;margin:auto;display:flex;flex-direction:column;gap:6px;">
+    <strong>TECHNOLOKIA — Servicio Técnico</strong>
+    <span>Año de creación: 2025</span>
+    <span>Email: contacto.technolokia@gmail.com</span>
+    <span>Instagram: @technolokia.ar</span>
+    <span>Tel. Tomás: 11-3405-3010 — Tel. Franco: 11-2744-1911</span>
+  </div>
+</footer>
+</body>
+</html>
+
+</html>
