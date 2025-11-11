@@ -24,6 +24,28 @@
   </style>
 </head>
 <body>
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="logo" onclick="location.href='index.html'">
+      <img src="logo-header.png" alt="Technolokia" class="logo-img">
+    </div>
+    <button class="menu-toggle" aria-expanded="false" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" aria-label="Navegación principal">
+      <a href="index.html">Inicio</a>
+      <a href="contac.html">Solicitar servicio</a>
+      <a href="profile.html" class="nav-profile hidden">Mi perfil</a>
+      <a href="admin.html" class="nav-admin hidden">Admin</a>
+      <a href="register.html" class="nav-register">Registrarse</a>
+      <a href="login.html" class="nav-login">Iniciar sesión</a>
+      <button class="nav-logout hidden btn btn-ghost small" type="button">Salir</button>
+    </nav>
+  </div>
+  <hr class="rule" />
+</header>
+
   <div class="container" id="main-form">
     <h1>Nueva Solicitud</h1>
     <p class="lead">Contanos el problema. Si todavía no elegiste plan, podés elegirlo acá.</p>
