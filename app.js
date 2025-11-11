@@ -1,20 +1,20 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const burger = document.querySelector('.menu-toggle');
-  const nav = document.querySelector('.nav');
+document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.querySelector(".menu-toggle");
+  const nav = document.querySelector(".nav");
   if (burger && nav) {
-    burger.addEventListener('click', () => {
-      burger.classList.toggle('active');
-      nav.classList.toggle('open');
-      const expanded = burger.getAttribute('aria-expanded') === 'true';
-      burger.setAttribute('aria-expanded', (!expanded).toString());
+    burger.addEventListener("click", () => {
+      burger.classList.toggle("active");
+      nav.classList.toggle("open");
+      const expanded = burger.getAttribute("aria-expanded") === "true";
+      burger.setAttribute("aria-expanded", (!expanded).toString());
     });
   }
 
-  const btnLogout = document.querySelector('.nav-logout');
+  const btnLogout = document.querySelector(".nav-logout");
   if (btnLogout) {
-    btnLogout.addEventListener('click', () => {
-      localStorage.removeItem('technolokia:session');
-      location.href = 'index.html';
+    btnLogout.addEventListener("click", () => {
+      localStorage.removeItem("technolokia:session");
+      location.href = "index.html";
     });
   }
 
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ✅ Solución provisional en la primera llamada<br>
         ✅ Técnicos certificados<br><br>
         Ideal para estudios, freelancers y oficinas pequeñas.
-      `
+      `,
     },
     exclusive: {
       title: "PLAN EXCLUSIVE",
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ✅ Técnico fijo asignado (Tomás o Franco)<br>
         ✅ Sin límite de solicitudes<br><br>
         Perfecto para empresas en crecimiento.
-      `
+      `,
     },
     premium: {
       title: "PLAN PREMIUM",
@@ -53,8 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ✅ Auditoría trimestral de IT incluida<br>
         ✅ Gestión de seguridad + backup remoto<br><br>
         Diseñado para empresas que no pueden frenar su operación.
-      `
-    }
+      `,
+    },
   };
 
   const modal = document.getElementById("plan-modal");
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalSelect = document.getElementById("modal-select-plan");
     const closeModal = document.getElementById("close-modal");
 
-    document.querySelectorAll(".select-plan").forEach(btn => {
+    document.querySelectorAll(".select-plan").forEach((btn) => {
       btn.addEventListener("click", () => {
         const plan = btn.dataset.plan;
         const p = plans[plan];
@@ -75,8 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove("hidden");
 
         modalSelect.onclick = () => {
+          // Guardamos el plan (standard, exclusive o premium)
           localStorage.setItem("technolokia:selected-plan", plan);
-          window.location.href = "register.html";
+
+          // Redirigimos a contac.html con los parámetros necesarios
+          window.location.href = `contac.html?tipo=plan&plan=${plan}`;
         };
       });
     });
