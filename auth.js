@@ -153,62 +153,80 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Perfil
   const profileBox = document.getElementById("profile-box");
-  if(profileBox){
-  const s=getSession();
-  const user=getUser();
+  if (profileBox) {
+    const s = getSession();
+    const user = getUser();
 
-  if(!s || !user || s.email!==user.email){
-    profileBox.innerHTML='<p class="muted">No hay sesión activa. <a href="login.html">Iniciar sesión</a></p>';
-    return;
-  }
+    if (!s || !user || s.email !== user.email) {
+      profileBox.innerHTML =
+        '<p class="muted">No hay sesión activa. <a href="login.html">Iniciar sesión</a></p>';
+      return;
+    }
 
-  profileBox.innerHTML = `
+    profileBox.innerHTML = `
     <div><b>Nombre:</b> ${user.name}</div>
     <div><b>Email:</b> ${user.email}</div>
-    <div><b>Teléfono:</b> ${user.phone || '—'}</div>
+    <div><b>Teléfono:</b> ${user.phone || "—"}</div>
   `;
 
     // Mostrar planes
-  const planesBox = document.getElementById("planes-box");
-  const plansInfo = {
-    standard: { title:"PLAN STANDARD", equipos:10, price:"$200 USD / mes" },
-    exclusive:{ title:"PLAN EXCLUSIVE", equipos:25, price:"$450 USD / mes" },
-    premium:  { title:"PLAN PREMIUM",  equipos:50, price:"$800 USD / mes" }
-  };
+    const planesBox = document.getElementById("planes-box");
+    const plansInfo = {
+      standard: {
+        title: "PLAN STANDARD",
+        equipos: 10,
+        price: "$200 USD / mes",
+      },
+      exclusive: {
+        title: "PLAN EXCLUSIVE",
+        equipos: 25,
+        price: "$450 USD / mes",
+      },
+      premium: { title: "PLAN PREMIUM", equipos: 50, price: "$800 USD / mes" },
+    };
 
-  if(!user.planes || user.planes.length === 0){
-    planesBox.innerHTML = `<p class="muted" style="margin-top:12px;">No tenés planes contratados.</p>`;
-  } else {
-    planesBox.innerHTML = user.planes.map((p, i) => {
-      
-      // 🔥 Normalizar nombre del plan
-      let tipo = p.tipo.toLowerCase();
-      if (tipo === "standart") tipo = "standard";
+    if (!user.planes || user.planes.length === 0) {
+      planesBox.innerHTML = `<p class="muted" style="margin-top:12px;">No tenés planes contratados.</p>`;
+    } else {
+      planesBox.innerHTML = user.planes
+        .map((p, i) => {
+          // 🔥 Normalizar nombre del plan
+          let tipo = p.tipo.toLowerCase();
+          if (tipo === "standart") tipo = "standard";
 
-      const info = plansInfo[tipo];
-      if (!info) return "";
+          const info = plansInfo[tipo];
+          if (!info) return "";
 
-      return `
+          return `
         <div class="panel plan" style="margin-top:16px;">
-          <h3>${info.title}</h3>
-          <p class="muted">${p.equipos} equipos registrados</p>
+          <h3>${
+            p.estado === "rechazado" ? "❌ Plan Rechazado" : info.title
+          }</h3>
+<p class="muted">
+  ${
+    p.estado === "rechazado"
+      ? p.razon || "Sin detalle"
+      : `${p.equipos} equipos registrados`
+  }
+</p>
+
           <h2 class="price">${info.price}</h2>
           <button class="btn btn-danger" data-index="${i}">Eliminar plan</button>
         </div>
       `;
-    }).join("");
+        })
+        .join("");
 
-    // Listener para eliminar plan
-    planesBox.querySelectorAll("button.btn-danger").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        user.planes.splice(Number(btn.dataset.index),1);
-        setUser(user);
-        location.reload();
+      // Listener para eliminar plan
+      planesBox.querySelectorAll("button.btn-danger").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          user.planes.splice(Number(btn.dataset.index), 1);
+          setUser(user);
+          location.reload();
+        });
       });
-    });
+    }
   }
-}
-
 
   // Solicitud
   const svcForm = document.getElementById("service-form");
