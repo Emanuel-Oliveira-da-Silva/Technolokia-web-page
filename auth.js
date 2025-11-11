@@ -170,46 +170,40 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
 
     // ==== Sincronizar estado de solicitudes con Discord ====
-    (async () => {
-      try {
-        const res = await fetch(
-          "https://technolokia-bot-production.up.railway.app/api/solicitudes"
-        );
-        const data = await res.json();
-        const userEmail = user.email.toLowerCase();
+    // ==== Sincronizar estado de solicitudes con Discord ====
+(async () => {
+  try {
+    const res = await fetch("https://technolokia-bot-production.up.railway.app/api/solicitudes");
+    const data = await res.json();
+    const userEmail = user.email.toLowerCase();
 
-        for (const id in data) {
-          const s = data[id];
-          if (s.email.toLowerCase() !== userEmail) continue;
+    for (const id in data) {
+      const s = data[id];
+      if (s.email.toLowerCase() !== userEmail) continue;
 
-          // Si fue aprobado → agregar/reemplazar plan
-          if (s.estado === "aprobado") {
-            const tipo =
-              s.plan.toLowerCase() === "standart"
-                ? "standard"
-                : s.plan.toLowerCase();
-            const exists = user.planes.some((p) => p.tipo === tipo);
-            if (!exists) {
-              user.planes.push({ tipo, equipos: s.equipos });
-              setUser(user);
-            }
-          }
+      // Normalizar nombre
+      let tipo = s.plan.toLowerCase();
+      if (tipo === "standart") tipo = "standard";
 
-          // Si fue rechazado → guardar rechazo para mostrarlo
-          if (s.estado === "rechazado") {
-            user.planes.push({
-              tipo: s.plan.toLowerCase(),
-              equipos: 0,
-              estado: "rechazado",
-              razon: s.razon || "Sin motivo especificado",
-            });
-            setUser(user);
-          }
-        }
-      } catch (err) {
-        console.warn("No se pudo sincronizar planes:", err);
+      // Chequear si ya existe este plan *con este estado*
+      const exists = user.planes.some(p => p.tipo === tipo && p.estado === s.estado);
+
+      if (!exists) {
+        // Agregar plan si aún no fue registrado
+        user.planes.push({
+          tipo,
+          equipos: s.equipos ?? 0,
+          estado: s.estado,
+          razon: s.razon || null
+        });
       }
-    })();
+    }
+
+    setUser(user);
+  } catch (err) {
+    console.warn("No se pudo sincronizar planes:", err);
+  }
+})();
 
     // Mostrar planes
     const planesBox = document.getElementById("planes-box");
